@@ -1,11 +1,12 @@
-from typing import Union
 from datetime import datetime
 import uuid
 
 from pydantic import BaseModel
 
+
 class PointBase(BaseModel):
     description: str
+
 
 class Point(PointBase):
     id: uuid.UUID
@@ -14,13 +15,16 @@ class Point(PointBase):
     updated_at: datetime
 
     class Config:
-        orm_mode: True
+        orm_mode = True
+
 
 class PointCreate(PointBase):
     update_id: uuid.UUID
 
+
 class UpdateBase(BaseModel):
     title: str
+
 
 class Update(UpdateBase):
     id: uuid.UUID
@@ -32,13 +36,16 @@ class Update(UpdateBase):
     class Config:
         orm_mode = True
 
+
 class UpdateCreate(UpdateBase):
     project_id: uuid.UUID
+
 
 class ProjectBase(BaseModel):
     title: str
     status: str
     description: str
+
 
 class Project(ProjectBase):
     id: uuid.UUID
@@ -50,11 +57,14 @@ class Project(ProjectBase):
     class Config:
         orm_mode = True
 
+
 class ProjectCreate(ProjectBase):
     user_id: uuid.UUID
 
+
 class UserBase(BaseModel):
     email: str
+
 
 class User(UserBase):
     id: uuid.UUID
@@ -64,6 +74,7 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
 
 class UserCreate(UserBase):
     password: str
