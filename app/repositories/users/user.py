@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 import uuid
 from app.utils import hash_password
 
-from . import models, schemas
+from ...db import models, schemas
 
 
 def get_users(db: Session):

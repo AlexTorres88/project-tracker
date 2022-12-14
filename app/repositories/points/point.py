@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 import uuid
 
-from . import models, schemas
+from ...db import models, schemas
 
 
 def get_point_by_id(db: Session, id: uuid.UUID):

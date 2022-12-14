@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 import uuid
 
-from . import models, schemas
+from ...db import models, schemas
 
 
 def get_projects(db: Session):

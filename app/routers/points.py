@@ -2,8 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 import uuid
-from app.db import schemas, update as conn_update, point as conn_point
+from app.db import schemas
 from app.db.database import get_db
+from app.repositories.points import point as conn_point
+from app.repositories.updates import update as conn_update
 
 router = APIRouter()
 
