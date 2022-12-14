@@ -11,8 +11,8 @@ router = APIRouter()
 
 # get projects
 @router.get("/", response_model=list[schemas.Project])
-def get(db: Session = Depends(get_db)):
-    projects = conn_project.get_projects(db=db)
+def get(page: int = 1, limit: int = 5, db: Session = Depends(get_db)):
+    projects = conn_project.get_projects(db, page, limit)
     return projects
 
 

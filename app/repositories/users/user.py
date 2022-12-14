@@ -5,8 +5,8 @@ from app.utils import get_password_hash
 from ...db import models, schemas
 
 
-def get_users(db: Session) -> list[schemas.User]:
-    return db.query(models.User).all()
+def get_users(db: Session, page: int = 1, limit: int = 5) -> list[schemas.User]:
+    return db.query(models.User).offset((page - 1) * limit).limit(limit).all()
 
 
 def get_user(db: Session, user_id: uuid.UUID) -> schemas.User:

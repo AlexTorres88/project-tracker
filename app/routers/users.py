@@ -9,6 +9,7 @@ router = APIRouter()
 
 # get users
 @router.get("/", response_model=list[schemas.User])
-def get_users(db: Session = Depends(get_db)):
-    users = conn_user.get_users(db)
+def get_users(page: int = 1, limit: int = 5, db: Session = Depends(get_db)):
+    users = conn_user.get_users(db, page, limit)
+    print(users)
     return users

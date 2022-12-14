@@ -4,8 +4,8 @@ import uuid
 from ...db import models, schemas
 
 
-def get_projects(db: Session):
-    return db.query(models.Project).all()
+def get_projects(db: Session, page: int = 1, limit: int = 5):
+    return db.query(models.Project).offset((page - 1) * limit).limit(limit).all()
 
 
 def get_project_by_id(db: Session, id: uuid.UUID):
