@@ -8,9 +8,7 @@ def get_projects_by_user(db: Session, user_id: uuid.UUID):
 
 def create_project(db: Session, project: schemas.ProjectCreate):
     db_project = models.Project(
-        title=project.title, 
-        description=project.description, 
-        status=project.status, 
+        **project.dict(),
         user_id=project.user_id
     )
 

@@ -27,7 +27,7 @@ class Update(UpdateBase):
     project_id: uuid.UUID
     created_at: datetime
     updated_at: datetime
-    points = list[Point] = []
+    points: list[Point] = []
 
     class Config:
         orm_mode = True
@@ -45,7 +45,7 @@ class Project(ProjectBase):
     user_id: uuid.UUID
     created_at: datetime
     updated_at: datetime
-    updates = list[Update] = []
+    updates: list[Update] = []
 
     class Config:
         orm_mode = True
@@ -60,7 +60,7 @@ class User(UserBase):
     id: uuid.UUID
     created_at: datetime
     updated_at: datetime
-    projects = list[Project] = []
+    projects: list[Project] = []
 
     class Config:
         orm_mode = True
