@@ -1,7 +1,14 @@
 from datetime import datetime
+from enum import Enum
 import uuid
 
 from pydantic import BaseModel
+
+
+class Status(str, Enum):
+    pending = "pending"
+    in_progress = "in_progress"
+    done = "done"
 
 
 class PointBase(BaseModel):
@@ -50,6 +57,7 @@ class ProjectBase(BaseModel):
 class Project(ProjectBase):
     id: uuid.UUID
     user_id: uuid.UUID
+    status: Status
     created_at: datetime
     updated_at: datetime
     updates: list[Update] = []
@@ -88,3 +96,10 @@ class LoginRequest(BaseModel):
 class TokenPayload(BaseModel):
     sub: str = None
     exp: int = None
+
+
+class ProjectFilters(BaseModel):
+    email: str = None
+    date: datetime = None
+    title: str = None
+    status: Status = None
