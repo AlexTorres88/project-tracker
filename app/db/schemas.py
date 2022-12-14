@@ -78,3 +78,13 @@ class User(UserBase):
 
 class UserCreate(UserBase):
     password: str
+
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+class TokenPayload(BaseModel):
+    sub: str = None
+    exp: int = None
