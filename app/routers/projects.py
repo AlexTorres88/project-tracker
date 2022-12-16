@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException
+from typing import Optional
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 import uuid
@@ -13,13 +14,27 @@ router = APIRouter()
 @router.get("/", response_model=list[schemas.Project])
 def get(
     page: int = 1,
-    limit: int = 5,
-    author: str = "",
-    title: str = "",
+    limit: int = Query(5, description="Limit per page"),
+    author: str = Query(None, description="Has to exactly match the author's email"),
+    title: str = Query(None, description="Has to exactly match the project's title"),
     status: schemas.Status = None,
+    from_date: str = Query(
+        None,
+        regex="(\d{4})[/.-](\d{2})[/.-](\d{2})$",
+        description="Projects from or after this date",
+        example="2022-12-10",
+    ),
+    to_date: str = Query(
+        None,
+        regex="(\d{4})[/.-](\d{2})[/.-](\d{2})$",
+        description="Projects in or before this date",
+        example="2022-12-12",
+    ),
     db: Session = Depends(get_db),
 ):
-    filters = schemas.ProjectFilters(email=author, title=title, status=status)
+    filters = schemas.ProjectFilters(
+        email=author, title=title, status=status, from_date=from_date, to_date=to_date
+    )
     projects = conn_project.get_projects(db, page, limit, filters)
     return projects
 

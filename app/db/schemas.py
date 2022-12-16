@@ -100,6 +100,7 @@ class TokenPayload(BaseModel):
 
 class ProjectFilters(BaseModel):
     email: str = None
-    date: datetime = None
+    from_date: str = None
+    to_date: str = None
     title: str = None
     status: Status = None

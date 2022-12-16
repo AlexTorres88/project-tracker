@@ -1,6 +1,7 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 import uuid
+from datetime import datetime
 
 from ...db import models, schemas
 from app.repositories.users import user as conn_user
@@ -26,6 +27,15 @@ def get_projects(
         queries.append(models.Project.title == filters.title)
     if filters.status:
         queries.append(models.Project.status == filters.status)
+    if filters.from_date:
+        from_date = datetime.strptime(filters.from_date, "%Y-%m-%d")
+        from_date.isoformat(sep="T", timespec="auto")
+        queries.append(models.Project.created_at >= from_date)
+    if filters.to_date:
+        to_date = datetime.strptime(filters.to_date, "%Y-%m-%d")
+        to_date.isoformat(sep="T", timespec="auto")
+        to_date = to_date.replace(hour=23, minute=59, second=59)
+        queries.append(models.Project.created_at <= to_date)
 
     return (
         db.query(models.Project)
@@ -47,7 +57,10 @@ def get_projects_by_user(db: Session, user_id: uuid.UUID):
 def create_project(db: Session, project: schemas.ProjectCreate):
 
     if project.status not in [e.value for e in schemas.Status]:
-        raise HTTPException(status_code=500, detail="Invalid status, use 'pending', 'in_progress' or 'done'")
+        raise HTTPException(
+            status_code=500,
+            detail="Invalid status, use 'pending', 'in_progress' or 'done'",
+        )
 
     db_project = models.Project(**project.dict())
 
