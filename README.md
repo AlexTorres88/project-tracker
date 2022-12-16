@@ -1,6 +1,6 @@
 # Project tracker application
 
-This application serves the purpose of tracking projects. It was done in fastapi using postgresql as the database. 
+This application serves the purpose of tracking projects. It was done in python using fastapi and postgresql.
 
 ## Model relationship
 
