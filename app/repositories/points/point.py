@@ -21,6 +21,14 @@ def create_point(db: Session, point: schemas.PointCreate):
     return db_point
 
 
+def update_point(db: Session, point: schemas.PointUpdate):
+    return (
+        db.query(models.Point)
+        .filter(models.Point.id == point.id)
+        .update({models.Point.description: point.description})
+    )
+
+
 def delete_point(db: Session, id: uuid.UUID):
     db.query(models.Point).filter(models.Point.id == id).delete(
         synchronize_session=False

@@ -20,6 +20,17 @@ def create_update(update: schemas.UpdateCreate, db: Session = Depends(get_db)):
     return conn_update.create_update(db, update)
 
 
+# put update
+@router.put("/", response_model=schemas.UpdatePut)
+def put_update(update: schemas.UpdatePut, db: Session = Depends(get_db)):
+    update = conn_update.get_update_by_id(db, update.id)
+
+    if not update:
+        raise HTTPException(status_code=404, detail="Update id does not exist")
+
+    return conn_update.put_update(db, update)
+
+
 # delete update
 @router.delete("/{id}")
 def delete_update(id: uuid.UUID, db: Session = Depends(get_db)):

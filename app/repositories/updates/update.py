@@ -21,6 +21,14 @@ def create_update(db: Session, update: schemas.UpdateCreate):
     return db_update
 
 
+def put_update(db: Session, update: schemas.UpdatePut):
+    return (
+        db.query(models.Update)
+        .filter(models.Update.id == update.id)
+        .update({models.Update.title: update.title})
+    )
+
+
 def delete_update(db: Session, id: uuid.UUID):
     db.query(models.Update).filter(models.Update.id == id).delete(
         synchronize_session=False

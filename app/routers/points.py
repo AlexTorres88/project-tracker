@@ -21,6 +21,18 @@ def create_point(point: schemas.PointCreate, db: Session = Depends(get_db)):
     return point
 
 
+# update point
+@router.put("/", response_model=schemas.Point)
+def update_point(point: schemas.PointUpdate, db: Session = Depends(get_db)):
+    update = conn_point.get_point_by_id(point.id)
+
+    if not update:
+        raise HTTPException(status_code=404, detail="Update id does not exist")
+
+    point = conn_point.update_point(db, point)
+    return point
+
+
 # delete point
 @router.delete("/{id}")
 def delete_point(id: uuid.UUID, db: Session = Depends(get_db)):

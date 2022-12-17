@@ -29,6 +29,10 @@ class PointCreate(PointBase):
     update_id: uuid.UUID
 
 
+class PointUpdate(PointBase):
+    id: uuid.UUID
+
+
 class UpdateBase(BaseModel):
     title: str
 
@@ -46,6 +50,10 @@ class Update(UpdateBase):
 
 class UpdateCreate(UpdateBase):
     project_id: uuid.UUID
+
+
+class UpdatePut(UpdateBase):
+    id: uuid.UUID
 
 
 class ProjectBase(BaseModel):
