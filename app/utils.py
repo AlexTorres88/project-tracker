@@ -65,7 +65,7 @@ async def get_current_user(
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Could not find user",
+            detail="Could not find user, login again",
         )
 
     return user

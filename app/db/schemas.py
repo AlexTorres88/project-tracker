@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import Enum
 import uuid
 
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class Status(str, Enum):
@@ -73,8 +73,17 @@ class Project(ProjectBase):
         orm_mode = True
 
 
+class ProjectPoint(PointBase):
+    pass
+
+
+class ProjectWithUpdate(UpdateBase):
+    points: list[ProjectPoint] = None
+
+
 class ProjectCreate(ProjectBase):
     user_id: uuid.UUID
+    updates: list[ProjectWithUpdate] = None
 
 
 class ProjectUpdate(BaseModel):
@@ -85,7 +94,7 @@ class ProjectUpdate(BaseModel):
 
 
 class UserBase(BaseModel):
-    email: str
+    email: EmailStr
 
 
 class User(UserBase):
@@ -103,7 +112,7 @@ class UserCreate(UserBase):
 
 
 class LoginRequest(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 

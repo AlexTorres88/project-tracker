@@ -15,5 +15,4 @@ def get_users(
     db: Session = Depends(get_db),
 ):
     users = conn_user.get_users(db, page, limit)
-    print(users)
     return users

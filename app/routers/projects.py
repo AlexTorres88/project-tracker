@@ -39,7 +39,10 @@ def get(
 
 # create project
 @router.post("/", response_model=schemas.Project)
-def create_project(project: schemas.ProjectCreate, db: Session = Depends(get_db)):
+def create_project(
+    project: schemas.ProjectCreate,
+    db: Session = Depends(get_db),
+):
     user = conn_user.get_user(db, project.user_id)
     if not user:
         raise HTTPException(status_code=404, detail="Invalid user id")

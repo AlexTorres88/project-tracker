@@ -40,6 +40,7 @@ def get_projects(
     return (
         db.query(models.Project)
         .filter(*queries)
+        .order_by(models.Project.created_at)
         .offset((page - 1) * limit)
         .limit(limit)
         .all()
@@ -62,9 +63,31 @@ def create_project(db: Session, project: schemas.ProjectCreate):
             detail="Invalid status, use 'pending', 'in_progress' or 'done'",
         )
 
-    db_project = models.Project(**project.dict())
+    proj = {
+        "title": project.title,
+        "status": project.status,
+        "description": project.description,
+        "user_id": project.user_id,
+        "id": uuid.uuid4(),
+    }
 
+    db_project = models.Project(**proj)
     db.add(db_project)
+    print(db_project.id)
+    if project.updates:
+        for update in project.updates:
+            db_update = models.Update(
+                title=update.title, project_id=db_project.id, id=uuid.uuid4()
+            )
+            db.add(db_update)
+
+            if update.points:
+                for point in update.points:
+                    db_point = models.Point(
+                        description=point.description, update_id=db_update.id
+                    )
+                    db.add(db_point)
+
     db.commit()
     db.refresh(db_project)
     return db_project
