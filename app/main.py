@@ -4,7 +4,7 @@ from fastapi.security import OAuth2PasswordBearer
 from app.db import models
 from app.db.database import engine
 from app.routers import projects, users, updates, points, auth
-from app.config import settings
+from fastapi.responses import RedirectResponse
 
 from app.utils import get_current_user
 
@@ -35,4 +35,4 @@ app.include_router(auth.router)
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return RedirectResponse("/docs")
