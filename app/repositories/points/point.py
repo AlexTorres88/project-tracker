@@ -1,10 +1,11 @@
 from sqlalchemy.orm import Session
 import uuid
+from datetime import datetime
 
 from ...db import models, schemas
 
 
-def get_point_by_id(db: Session, id: uuid.UUID):
+def get_point_by_id(db: Session, id: uuid.UUID) -> schemas.Point:
     return db.query(models.Point).filter(models.Point.id == id).first()
 
 
@@ -22,11 +23,15 @@ def create_point(db: Session, point: schemas.PointCreate):
 
 
 def update_point(db: Session, point: schemas.PointUpdate):
-    return (
-        db.query(models.Point)
-        .filter(models.Point.id == point.id)
-        .update({models.Point.description: point.description})
+    db.query(models.Point).filter(models.Point.id == point.id).update(
+        {
+            models.Point.description: point.description,
+            models.Point.updated_at: datetime.now(),
+        },
+        synchronize_session=False,
     )
+    db.commit()
+    return get_point_by_id(db, point.id)
 
 
 def delete_point(db: Session, id: uuid.UUID):

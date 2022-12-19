@@ -1,10 +1,11 @@
 from sqlalchemy.orm import Session
 import uuid
+from datetime import datetime
 
 from ...db import models, schemas
 
 
-def get_update_by_id(db: Session, id: uuid.UUID):
+def get_update_by_id(db: Session, id: uuid.UUID) -> schemas.Update:
     return db.query(models.Update).filter(models.Update.id == id).first()
 
 
@@ -22,11 +23,11 @@ def create_update(db: Session, update: schemas.UpdateCreate):
 
 
 def put_update(db: Session, update: schemas.UpdatePut):
-    return (
-        db.query(models.Update)
-        .filter(models.Update.id == update.id)
-        .update({models.Update.title: update.title})
+    db.query(models.Update).filter(models.Update.id == update.id).update(
+        {models.Update.title: update.title, models.Update.updated_at: datetime.now()}
     )
+    db.commit()
+    return get_update_by_id(db, update.id)
 
 
 def delete_update(db: Session, id: uuid.UUID):

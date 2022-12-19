@@ -21,14 +21,12 @@ def get(
     from_date: str = Query(
         None,
         regex="(\d{4})[/.-](\d{2})[/.-](\d{2})$",
-        description="Projects from or after this date",
-        example="2022-12-10",
+        description="Projects from or after this date, format YYYY-MM-DD",
     ),
     to_date: str = Query(
         None,
         regex="(\d{4})[/.-](\d{2})[/.-](\d{2})$",
-        description="Projects in or before this date",
-        example="2022-12-12",
+        description="Projects in or before this date, format YYYY-MM-DD",
     ),
     db: Session = Depends(get_db),
 ):
@@ -46,6 +44,17 @@ def create_project(project: schemas.ProjectCreate, db: Session = Depends(get_db)
     if not user:
         raise HTTPException(status_code=404, detail="Invalid user id")
     return conn_project.create_project(db, project)
+
+
+# update project
+@router.put("/", response_model=schemas.Project)
+def update_project(project: schemas.ProjectUpdate, db: Session = Depends(get_db)):
+    project_exist = conn_project.get_project_by_id(db, project.id)
+
+    if not project_exist:
+        raise HTTPException(status_code=404, detail="Project id does not exist")
+
+    return conn_project.update_project(db, project)
 
 
 # delete project

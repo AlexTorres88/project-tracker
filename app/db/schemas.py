@@ -58,14 +58,13 @@ class UpdatePut(UpdateBase):
 
 class ProjectBase(BaseModel):
     title: str
-    status: str
+    status: Status
     description: str
 
 
 class Project(ProjectBase):
     id: uuid.UUID
     user_id: uuid.UUID
-    status: Status
     created_at: datetime
     updated_at: datetime
     updates: list[Update] = []
@@ -76,6 +75,13 @@ class Project(ProjectBase):
 
 class ProjectCreate(ProjectBase):
     user_id: uuid.UUID
+
+
+class ProjectUpdate(BaseModel):
+    id: uuid.UUID
+    title: str = None
+    status: Status = None
+    description: str = None
 
 
 class UserBase(BaseModel):

@@ -70,6 +70,24 @@ def create_project(db: Session, project: schemas.ProjectCreate):
     return db_project
 
 
+def update_project(db: Session, project: schemas.ProjectUpdate):
+
+    # create new object to ignore "id" field
+    new_proj = {
+        "title": project.title,
+        "description": project.description,
+        "status": project.status,
+        "updated_at": datetime.now(),
+    }
+
+    update_data = {k: v for k, v in new_proj.items() if v is not None}
+
+    db.query(models.Project).filter(models.Project.id == project.id).update(update_data)
+
+    db.commit()
+    return get_project_by_id(db, project.id)
+
+
 def delete_project(db: Session, id: uuid.UUID):
     db.query(models.Project).filter(models.Project.id == id).delete(
         synchronize_session=False
